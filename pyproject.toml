@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "bitsgpt"
+version = "0.1.0"
+description = "Your campus buddy chatbot for advice, resources and making student life easier."
+authors = ["Swastik Goswami <cwswastik2005@gmail.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.11"
+python-dotenv = "^1.0.1"
+langgraph = "^0.2.60"
+langsmith = "^0.2.7"
+langchain-groq = "^0.2.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
