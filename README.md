@@ -46,6 +46,7 @@ Follow these steps to set up BitsGPT locally:
 
 4. **Run the Application**:
    Run langgraph dev to start the server. This will open langgraph studio in your browser.
+
    ```bash
    langgraph dev
    ```
