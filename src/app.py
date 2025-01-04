@@ -1,6 +1,12 @@
-from langgraph.graph import StateGraph, END
+from langgraph.graph import END, StateGraph
+
+from .nodes import (
+    course_query,
+    general_campus_query,
+    intent_classifier,
+    not_related_query,
+)
 from .state import State
-from .nodes import intent_classifier, course_query, general_campus_query, not_related_query
 
 
 class BitsGPT:
@@ -25,8 +31,7 @@ class BitsGPT:
                 return "general_campus_query"
             else:
                 return "not_related_query"
-            
-        
+
         graph.add_conditional_edges("intent_classifer", intent_router)
 
         graph.add_edge("course_query", END)
