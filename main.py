@@ -1,6 +1,9 @@
-from src.agents import Agents
+from src.app import BitsGPT
 
-agents = Agents()
+bitsgpt = BitsGPT()
 
-# print(agents.llm.invoke("What is the meaning of life?"))
-print(agents.intent_classifier("What are some reviews for meow?", ""))
+state = {
+    "messages": ["I want to know about the fests"],
+    "chat_history": ""
+}
+print(bitsgpt.app.invoke(state))
