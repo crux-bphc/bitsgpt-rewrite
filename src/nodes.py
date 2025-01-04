@@ -6,7 +6,7 @@ agents = Agents()
 
 def intent_classifier(state: State):
     query = state["messages"][0].content
-    result = agents.intent_classifier(query, state["chat_history"])
+    result = agents.intent_classifier(query, state.get("chat_history", ""))
     
     return {"messages": [result]}
 
@@ -17,7 +17,7 @@ def course_query(state: State):
 
 def general_campus_query(state: State):
     query = state["messages"][0].content
-    result = agents.general_campus_query(query, state["chat_history"])
+    result = agents.general_campus_query(query, state.get("chat_history", ""))
     return {"messages": [result]}
 
 def not_related_query(state: State):

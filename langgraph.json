@@ -1,0 +1,7 @@
+{
+  "dependencies": ["pyproject.toml"],
+  "graphs": {
+    "bitsgpt": "./main.py:app"
+  },
+  "env": "./.env"
+}
