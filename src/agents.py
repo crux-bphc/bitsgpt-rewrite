@@ -1,12 +1,12 @@
 import os
 import textwrap
+
 from dotenv import load_dotenv
-
-
-from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_groq import ChatGroq
 
 load_dotenv()
+
 
 class Agents:
     def __init__(self):
@@ -25,8 +25,9 @@ class Agents:
                 agent_name = agent_name.split(".")[0]
                 self.prompts[agent_name] = f.read()
 
-
-    def get_prompt(self, agent_name: str, query: str, chat_history: str, agent_scratchpad=False) -> ChatPromptTemplate:
+    def get_prompt(
+        self, agent_name: str, query: str, chat_history: str, agent_scratchpad=False
+    ) -> ChatPromptTemplate:
 
         prompt = [
             (
@@ -35,21 +36,25 @@ class Agents:
             ),
             (
                 "user",
-                textwrap.dedent(f"<query>{query}</query>\n\n<history>{chat_history}</history>"),
+                textwrap.dedent(
+                    f"<query>{query}</query>\n\n<history>{chat_history}</history>"
+                ),
             ),
         ]
         if agent_scratchpad:
             prompt.append(("placeholder", "{agent_scratchpad}"))
         return ChatPromptTemplate.from_messages(prompt)
-    
+
     def intent_classifier(self, query: str, chat_history: str) -> str:
         prompt = self.get_prompt("INTENT_CLASSIFIER_AGENT", query, chat_history)
 
         chain = prompt | self.llm
 
-        result = chain.invoke({
-            "input": query,
-        })
+        result = chain.invoke(
+            {
+                "input": query,
+            }
+        )
 
         return result
 
@@ -58,11 +63,13 @@ class Agents:
 
         chain = prompt | self.llm
 
-        result = chain.invoke({
-            "input": query,
-        })
+        result = chain.invoke(
+            {
+                "input": query,
+            }
+        )
 
         return result
-    
+
     def course_query(self, query: str, chat_history: str) -> str:
         raise NotImplementedError("Course query not implemented yet")
