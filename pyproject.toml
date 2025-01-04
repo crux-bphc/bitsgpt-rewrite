@@ -12,6 +12,7 @@ python-dotenv = "^1.0.1"
 langgraph = "^0.2.60"
 langsmith = "^0.2.7"
 langchain-groq = "^0.2.2"
+langgraph-cli = {extras = ["inmem"], version = "^0.1.65"}
 
 
 [build-system]
