@@ -51,7 +51,7 @@ class Agents:
             "input": query,
         })
 
-        return result.content
+        return result
 
     def general_campus_query(self, query: str, chat_history: str) -> str:
         prompt = self.get_prompt("GENERAL_CAMPUS_QUERY_AGENT", query, chat_history)
@@ -62,4 +62,7 @@ class Agents:
             "input": query,
         })
 
-        return result.content
+        return result
+    
+    def course_query(self, query: str, chat_history: str) -> str:
+        raise NotImplementedError("Course query not implemented yet")

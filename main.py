@@ -3,7 +3,7 @@ from src.app import BitsGPT
 bitsgpt = BitsGPT()
 
 state = {
-    "messages": ["I want to know about the fests"],
+    "messages": ["What is the capital of France?"],
     "chat_history": ""
 }
 print(bitsgpt.app.invoke(state))
