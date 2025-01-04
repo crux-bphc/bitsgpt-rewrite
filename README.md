@@ -16,7 +16,7 @@ Follow these steps to set up BitsGPT locally:
 
 ### Prerequisites
 
-- Python 3.10 or higher
+- Python 3.11 or higher
 - [Poetry](https://python-poetry.org/) for dependency management
 
 ---
