@@ -1,6 +1,7 @@
-from langchain.pydantic_v1 import BaseModel, Field
 from enum import Enum
 from typing import Optional
+
+from langchain.pydantic_v1 import BaseModel, Field
 
 
 class Category(str, Enum):

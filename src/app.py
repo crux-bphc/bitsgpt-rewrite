@@ -4,8 +4,8 @@ from .nodes import (
     course_query,
     general_campus_query,
     intent_classifier,
-    not_related_query,
     long_term_memory,
+    not_related_query,
 )
 from .state import State
 

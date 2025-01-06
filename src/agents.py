@@ -2,10 +2,11 @@ import os
 import textwrap
 
 from dotenv import load_dotenv
+from langchain.agents import AgentExecutor, create_tool_calling_agent
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_groq import ChatGroq
+
 from src.tools.memory_tool import tool_modify_memory
-from langchain.agents import create_tool_calling_agent, AgentExecutor
 
 load_dotenv()
 

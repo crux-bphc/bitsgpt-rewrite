@@ -1,8 +1,9 @@
 from typing import Annotated, Optional
 
 from langgraph.graph.message import add_messages
-from src.memory.data import AddMemory
 from typing_extensions import TypedDict
+
+from src.memory.data import AddMemory
 
 
 class State(TypedDict):
