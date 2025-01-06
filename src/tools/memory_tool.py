@@ -15,11 +15,11 @@ def modify_memory(
     """
     print(f"Modifying memory for {id} with action {action}")
     conn = psycopg2.connect(
-        dbname="postgres",
+        dbname=os.getenv("POSTGRES_DB"),
         user=os.getenv("POSTGRES_USER"),
         password=os.getenv("POSTGRES_PASS"),
-        host="localhost",
-        port="5432",
+        host=os.getenv("POSTGRES_HOST"),
+        port=os.getenv("POSTGRES_PORT"),
     )
     cur = conn.cursor()
     cur.execute(

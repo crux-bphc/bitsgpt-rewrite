@@ -31,3 +31,16 @@ def not_related_query(state: State):
         "I'm sorry, I don't understand the question, if it relates to campus please rephrase."
     )
     return {"messages": [result]}
+
+
+def long_term_memory(state: State):
+    query = state["messages"][0].content
+    user_id = state["user_id"]
+    # parse long term memory here.
+    long_term_memories = state.get("long_term_memories", "")
+    result = agents.long_term_memory(
+        user_id,
+        query,
+        long_term_memories,
+    )
+    return {"messages": [result]}

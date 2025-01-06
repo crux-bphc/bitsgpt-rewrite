@@ -4,6 +4,8 @@ import textwrap
 from dotenv import load_dotenv
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_groq import ChatGroq
+from src.tools.memory_tool import tool_modify_memory
+from langchain.agents import create_tool_calling_agent, AgentExecutor
 
 load_dotenv()
 
@@ -26,7 +28,7 @@ class Agents:
                 self.prompts[agent_name] = f.read()
 
     def get_prompt(
-        self, agent_name: str, query: str, chat_history: str, agent_scratchpad=False
+        self, agent_name: str, user_input: str, agent_scratchpad=False
     ) -> ChatPromptTemplate:
 
         prompt = [
@@ -36,9 +38,7 @@ class Agents:
             ),
             (
                 "user",
-                textwrap.dedent(
-                    f"<query>{query}</query>\n\n<history>{chat_history}</history>"
-                ),
+                textwrap.dedent(user_input),
             ),
         ]
         if agent_scratchpad:
@@ -46,7 +46,10 @@ class Agents:
         return ChatPromptTemplate.from_messages(prompt)
 
     def intent_classifier(self, query: str, chat_history: str) -> str:
-        prompt = self.get_prompt("INTENT_CLASSIFIER_AGENT", query, chat_history)
+        prompt = self.get_prompt(
+            "INTENT_CLASSIFIER_AGENT",
+            f"<query>{query}</query>\n\n<history>{chat_history}</history>",
+        )
 
         chain = prompt | self.llm
 
@@ -59,7 +62,10 @@ class Agents:
         return result
 
     def general_campus_query(self, query: str, chat_history: str) -> str:
-        prompt = self.get_prompt("GENERAL_CAMPUS_QUERY_AGENT", query, chat_history)
+        prompt = self.get_prompt(
+            "GENERAL_CAMPUS_QUERY_AGENT",
+            f"<query>{query}</query>\n\n<history>{chat_history}</history>",
+        )
 
         chain = prompt | self.llm
 
@@ -73,3 +79,11 @@ class Agents:
 
     def course_query(self, query: str, chat_history: str) -> str:
         raise NotImplementedError("Course query not implemented yet")
+
+    def long_term_memory(self, id: str, query: str, memories: str) -> str:
+        tools = [tool_modify_memory]
+        prompt = self.get_prompt("LONG_TERM_MEMORY_AGENT", query, agent_scratchpad=True)
+        agent = create_tool_calling_agent(self.llm, tools, prompt)
+        chain = AgentExecutor(agent=agent, tools=tools)
+        result = chain.invoke({"user_id": id, "memories": memories})
+        return result["output"]

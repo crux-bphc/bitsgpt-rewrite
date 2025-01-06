@@ -63,6 +63,11 @@ LANGCHAIN_TRACING_V2=true
 LANGCHAIN_ENDPOINT="https://api.smith.langchain.com"
 LANGCHAIN_API_KEY=...
 LANGCHAIN_PROJECT="bitsgpt-rewrite"
+POSTGRES_DB=
+POSTGRES_USER=
+POSTGRES_PASS=
+POSTGRES_HOST=
+POSTGRES_PORT=
 ```
 
 Replace the keys with the appropriate values.
