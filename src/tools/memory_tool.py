@@ -1,8 +1,10 @@
-from langchain.tools import StructuredTool
-from src.memory.data import AddMemory
+import os
+
 import psycopg2
 from dotenv import load_dotenv
-import os
+from langchain.tools import StructuredTool
+
+from src.memory.data import AddMemory
 
 load_dotenv()
 
