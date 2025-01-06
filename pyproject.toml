@@ -14,6 +14,9 @@ langsmith = "^0.2.7"
 langchain-groq = "^0.2.2"
 langgraph-cli = {extras = ["inmem"], version = "^0.1.65"}
 pre-commit = "^4.0.1"
+psycopg2-binary = "^2.9.10"
+langchain-core = "^0.3.29"
+langchain = "^0.3.14"
 
 
 [build-system]
