@@ -8,6 +8,14 @@ from src.memory.data import AddMemory
 
 load_dotenv()
 
+conn = psycopg2.connect(
+    dbname=os.getenv("POSTGRES_DB"),
+    user=os.getenv("POSTGRES_USER"),
+    password=os.getenv("POSTGRES_PASS"),
+    host=os.getenv("POSTGRES_HOST"),
+    port=os.getenv("POSTGRES_PORT"),
+)
+
 
 def modify_memory(
     id: str, memory: str, category: str, action: str, memory_old: str = None
@@ -15,14 +23,7 @@ def modify_memory(
     """
     Function to modify memory in the database
     """
-    print(f"Modifying memory for {id} with action {action}")
-    conn = psycopg2.connect(
-        dbname=os.getenv("POSTGRES_DB"),
-        user=os.getenv("POSTGRES_USER"),
-        password=os.getenv("POSTGRES_PASS"),
-        host=os.getenv("POSTGRES_HOST"),
-        port=os.getenv("POSTGRES_PORT"),
-    )
+    print(f"Modifying long term memory for {id} with action {action}")
     cur = conn.cursor()
     cur.execute(
         """
