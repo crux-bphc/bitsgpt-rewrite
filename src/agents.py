@@ -7,6 +7,9 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_groq import ChatGroq
 
 from src.tools.memory_tool import tool_modify_memory
+from src.campus_rag.rag_chain_components import get_retriever, output_parser
+from langchain_core.runnables import RunnableParallel, RunnablePassthrough
+from langchain.prompts import ChatPromptTemplate
 
 load_dotenv()
 
@@ -63,19 +66,21 @@ class Agents:
         return result
 
     def general_campus_query(self, query: str, chat_history: str) -> str:
-        prompt = self.get_prompt(
+        PROMPT_TEMPLATE = self.get_prompt(
             "GENERAL_CAMPUS_QUERY_AGENT",
             f"<query>{query}</query>\n\n<history>{chat_history}</history>",
         )
 
-        chain = prompt | self.llm
+        vectorstore_retriever = get_retriever()
 
-        result = chain.invoke(
-            {
-                "input": query,
-            }
+        setup_and_retrieval = RunnableParallel(
+            {"context": vectorstore_retriever, "question": RunnablePassthrough()}
         )
 
+        
+        chain = setup_and_retrieval | PROMPT_TEMPLATE | self.llm | output_parser
+
+        result = chain.invoke(query)
         return result
 
     def course_query(self, query: str, chat_history: str) -> str:
