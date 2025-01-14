@@ -2,3 +2,4 @@
 __pycache__/
 .langgraph_api
 chroma
+.vscode/
