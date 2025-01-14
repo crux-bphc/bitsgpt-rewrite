@@ -3,13 +3,13 @@ import textwrap
 
 from dotenv import load_dotenv
 from langchain.agents import AgentExecutor, create_tool_calling_agent
+from langchain.prompts import ChatPromptTemplate
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import RunnableParallel, RunnablePassthrough
 from langchain_groq import ChatGroq
 
-from src.tools.memory_tool import tool_modify_memory
 from src.campus_rag.rag_chain_components import get_retriever, output_parser
-from langchain_core.runnables import RunnableParallel, RunnablePassthrough
-from langchain.prompts import ChatPromptTemplate
+from src.tools.memory_tool import tool_modify_memory
 
 load_dotenv()
 
@@ -77,7 +77,6 @@ class Agents:
             {"context": vectorstore_retriever, "question": RunnablePassthrough()}
         )
 
-        
         chain = setup_and_retrieval | PROMPT_TEMPLATE | self.llm | output_parser
 
         result = chain.invoke(query)
