@@ -8,7 +8,9 @@ embeddings = HuggingFaceEmbeddings(model_name=model_id, model_kwargs=model_kwarg
 
 
 def get_retriever(**kwargs):
-    db = Chroma(persist_directory="chroma", embedding_function=embeddings)
+    db = Chroma(
+        persist_directory=r"src\campus_rag\chroma", embedding_function=embeddings
+    )
     retriever = db.as_retriever(**kwargs)
     return retriever
 
