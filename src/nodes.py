@@ -2,6 +2,7 @@ from langchain_core.messages import AIMessage
 
 from .agents import Agents
 from .memory.long_term_memory import parse_long_term_memory
+from .memory.short_term_memory import add_short_term_memory
 from .state import State
 
 agents = Agents()
@@ -17,12 +18,16 @@ def intent_classifier(state: State):
 def course_query(state: State):
     query = state["messages"][0].content
     result = AIMessage("Course query not implemented yet")
+    # Add short term memory here once implemented.
     return {"messages": [result]}
 
 
 def general_campus_query(state: State):
     query = state["messages"][0].content
     result = agents.general_campus_query(query, state.get("chat_history", ""))
+    add_short_term_memory(
+        state["user_id"], query, result.content, "general_campus_query"
+    )
     return {"messages": [result]}
 
 
@@ -30,6 +35,9 @@ def not_related_query(state: State):
     query = state["messages"][0].content
     result = AIMessage(
         "I'm sorry, I don't understand the question, if it relates to campus please rephrase."
+    )
+    add_short_term_memory(
+        state["user_id"], query, not_related_query, "intent_classifier"
     )
     return {"messages": [result]}
 
