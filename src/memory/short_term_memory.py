@@ -26,11 +26,15 @@ def add_short_term_memory(id: str, query: str, reply: str, agent: str) -> None:
     cur = conn.cursor()
     cur.execute(
         """
-        CREATE TABLE IF NOT EXISTS short_term_memory (id VARCHAR(255) NOT NULL, message_id VARCHAR(255) NOT NULL, created_at TIMESTAMP NOT NULL, query VARCHAR(255) NOT NULL, reply VARCHAR(255) NOT NULL, agent VARCHAR(255) NOT NULL);
+        CREATE TABLE IF NOT EXISTS short_term_memory (id VARCHAR(255) NOT NULL, message_id VARCHAR(255) NOT NULL, created_at TIMESTAMP NOT NULL, query TEXT NOT NULL, reply TEXT NOT NULL, agent VARCHAR(255) NOT NULL);
         """
     )
     message_id = str(uuid.uuid4())
     created_at = datetime.now()
+
+    query = query.replace("'", "''")
+    reply = reply.replace("'", "''")
+
     cur.execute(
         f"""
         INSERT INTO short_term_memory (id, message_id, created_at, query, reply, agent)
