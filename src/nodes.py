@@ -1,7 +1,7 @@
 from langchain_core.messages import AIMessage
 
 from .agents import Agents
-from .memory.data import parse_memory
+from .memory.long_term_memory import parse_long_term_memory
 from .state import State
 
 agents = Agents()
@@ -37,7 +37,7 @@ def not_related_query(state: State):
 def long_term_memory(state: State):
     query = state["messages"][0].content
     user_id = state["user_id"]
-    long_term_memories = parse_memory(state.get("long_term_memories", []))
+    long_term_memories = parse_long_term_memory(state.get("long_term_memories", []))
     result = agents.long_term_memory(
         user_id,
         query,
