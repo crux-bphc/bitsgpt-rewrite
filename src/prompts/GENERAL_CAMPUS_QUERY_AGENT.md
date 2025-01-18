@@ -12,3 +12,8 @@ Here is some information about the campus:
 8. ATMOS is the technical fest of the campus.
 9. Pearl is the cultural fest of the campus.
 10. Verba Maximus is the literary fest of the campus.
+
+{context}
+
+---
+Answer the question without using the word context: {question}
