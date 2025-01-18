@@ -31,6 +31,14 @@ class Agents:
                 agent_name = agent_name.split(".")[0]
                 self.prompts[agent_name] = f.read()
 
+        self.depths = {
+            "intent_classifier": 1,
+            "general_campus_query": 2,
+            "course_query": 2,
+            "not_related_query": 2,
+            "long_term_memory": 3,
+        }
+
     def _get_prompt(
         self, agent_name: str, user_input: str, agent_scratchpad=False
     ) -> ChatPromptTemplate:
@@ -63,7 +71,7 @@ class Agents:
             }
         )
 
-        return result
+        return result.content
 
     def general_campus_query(self, query: str, chat_history: str) -> str:
         PROMPT_TEMPLATE = self._get_prompt(
