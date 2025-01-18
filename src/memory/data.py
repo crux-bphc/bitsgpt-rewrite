@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Optional
 
-from langchain.pydantic_v1 import BaseModel, Field
+from pydantic import BaseModel, Field
 
 
 class Category(str, Enum):
@@ -35,5 +35,18 @@ class AddMemory(BaseModel):
     )
 
 
-def parse_memory(memory: AddMemory):
-    raise NotImplementedError("This function is not yet implemented")
+def parse_memory(memory: list[AddMemory]) -> str:
+    """
+    Function to parse memory from the database.
+    """
+    memory_dict = {}
+    for mem in memory:
+        if Category(mem.category).value not in memory_dict:
+            memory_dict[Category(mem.category).value] = []
+        memory_dict[Category(mem.category).value].append(mem.memory)
+    long_term_memory = ""
+    for category in memory_dict:
+        long_term_memory += f"{category}:\n"
+        for mem in memory_dict[category]:
+            long_term_memory += f"- {mem}\n"
+    return long_term_memory
