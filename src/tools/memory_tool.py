@@ -3,8 +3,9 @@ import os
 import psycopg2
 from dotenv import load_dotenv
 from langchain.tools import StructuredTool
+from langchain_core.tools import ToolException
 
-from src.memory.data import AddMemory
+from src.memory.data import AddMemory, Category
 
 load_dotenv()
 
@@ -23,7 +24,17 @@ def modify_memory(
     """
     Function to modify memory in the database
     """
-    print(f"Modifying long term memory for {id} with action {action}")
+    print(
+        f"Modifying long term memory for {id} with action {action} and category {Category(category).value}"
+    )
+    if Category(category).value not in [
+        "Course Likes",
+        "Course Dislikes",
+        "Branch",
+        "Clubs",
+        "Person Attributes",
+    ]:
+        return "Invalid category choose from: Course Likes, Course Dislikes, Branch, Clubs, Person Attributes"
     cur = conn.cursor()
     cur.execute(
         """
@@ -38,7 +49,7 @@ def modify_memory(
         cur.execute(
             f"""
             INSERT INTO longterm_memory (id, memory, category)
-            VALUES ('{id}', '{memory}', '{category}');
+            VALUES ('{id}', '{memory}', '{Category(category).value}');
             """
         )
         conn.commit()
@@ -57,7 +68,7 @@ def modify_memory(
         cur.execute(
             f"""
             DELETE FROM longterm_memory
-            WHERE id = '{id}' AND memory = '{memory_old}' AND category = '{category}';
+            WHERE id = '{id}' AND memory = '{memory_old}' AND category = '{Category(category).value}';
             """
         )
         conn.commit()
@@ -66,9 +77,49 @@ def modify_memory(
         return "Invalid action"
 
 
+def fetch_long_term_memory(id: str) -> list[AddMemory]:
+    """
+    Function to fetch long term memory from the database
+    """
+    cur = conn.cursor()
+    cur.execute(
+        f"""
+        SELECT memory, category
+        FROM longterm_memory
+        WHERE id = '{id}';
+        """
+    )
+    rows = cur.fetchall()
+    print(f"Fetched long term memory for {id} = {rows}")
+    return [
+        AddMemory(id=id, memory=row[0], category=row[1], action="Create")
+        for row in rows
+    ]
+
+
+def reset_long_term_memory(id: str) -> None:
+    """
+    Function to reset long term memory from the database
+    """
+    cur = conn.cursor()
+    cur.execute(
+        f"""
+        DELETE FROM longterm_memory
+        WHERE id = '{id}';
+        """
+    )
+    conn.commit()
+    print(f"Reset long term memory for {id}")
+
+
+def _handle_tool_error(error: ToolException) -> str:
+    return f"The following errors occurred during tool execution: `{error.args[0]}`"
+
+
 tool_modify_memory = StructuredTool.from_function(
     func=modify_memory,
     name="modify_memory",
     description="Modify the long term memory of a user",
     args_schema=AddMemory,
+    handle_tool_error=_handle_tool_error,
 )
