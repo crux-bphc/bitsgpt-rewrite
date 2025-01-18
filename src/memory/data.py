@@ -1,7 +1,8 @@
+from datetime import datetime
 from enum import Enum
 from typing import Optional
 
-from langchain.pydantic_v1 import BaseModel, Field
+from pydantic import BaseModel, Field
 
 
 class Category(str, Enum):
@@ -18,7 +19,7 @@ class Action(str, Enum):
     Delete = "Delete"
 
 
-class AddMemory(BaseModel):
+class LongTermMemory(BaseModel):
     id: str = Field(..., description="The ID of the user")
     memory: str = Field(
         ...,
@@ -35,5 +36,40 @@ class AddMemory(BaseModel):
     )
 
 
-def parse_memory(memory: AddMemory):
-    raise NotImplementedError("This function is not yet implemented")
+class ShortTermMemory(BaseModel):
+    id: str = Field(
+        ...,
+        title="User ID",
+        description="Unique identifier for the user.",
+        examples=["123"],
+    )
+    message_id: str = Field(
+        ...,
+        title="Message ID",
+        description="Unique identifier for the message.",
+        examples=["8b47dfe8-0960-4b80-b551-471b47a650a0"],
+    )
+    created_at: datetime = Field(
+        ...,
+        title="Created At",
+        description="Timestamp of when the memory was created.",
+        examples=["2022-01-01T00:00:00"],
+    )
+    query: str = Field(
+        ...,
+        title="Query",
+        description="User query.",
+        examples=["Where is the library?"],
+    )
+    reply: str = Field(
+        ...,
+        title="Reply",
+        description="Agent's reply.",
+        examples=["The library is on the second floor."],
+    )
+    agent: str = Field(
+        ...,
+        title="Agent",
+        description="Agent that replied.",
+        examples=["INTENT_CLASSIFIER_AGENT"],
+    )
