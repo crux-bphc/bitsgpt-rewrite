@@ -28,7 +28,7 @@ class Agents:
                 agent_name = agent_name.split(".")[0]
                 self.prompts[agent_name] = f.read()
 
-    def get_prompt(
+    def _get_prompt(
         self, agent_name: str, user_input: str, agent_scratchpad=False
     ) -> ChatPromptTemplate:
 
@@ -47,7 +47,7 @@ class Agents:
         return ChatPromptTemplate.from_messages(prompt)
 
     def intent_classifier(self, query: str, chat_history: str) -> str:
-        prompt = self.get_prompt(
+        prompt = self._get_prompt(
             "INTENT_CLASSIFIER_AGENT",
             f"<query>{query}</query>\n\n<history>{chat_history}</history>",
         )
@@ -63,7 +63,7 @@ class Agents:
         return result
 
     def general_campus_query(self, query: str, chat_history: str) -> str:
-        prompt = self.get_prompt(
+        prompt = self._get_prompt(
             "GENERAL_CAMPUS_QUERY_AGENT",
             f"<query>{query}</query>\n\n<history>{chat_history}</history>",
         )
@@ -83,7 +83,9 @@ class Agents:
 
     def long_term_memory(self, id: str, query: str, memories: str) -> str:
         tools = [tool_modify_memory]
-        prompt = self.get_prompt("LONG_TERM_MEMORY_AGENT", query, agent_scratchpad=True)
+        prompt = self._get_prompt(
+            "LONG_TERM_MEMORY_AGENT", query, agent_scratchpad=True
+        )
         agent = create_tool_calling_agent(self.llm, tools, prompt)
         chain = AgentExecutor(agent=agent, tools=tools)
         result = chain.invoke({"user_id": id, "memories": memories})
