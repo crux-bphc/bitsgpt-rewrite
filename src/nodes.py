@@ -25,9 +25,7 @@ def course_query(state: State):
 def general_campus_query(state: State):
     query = state["messages"][0].content
     result = agents.general_campus_query(query, state.get("chat_history", ""))
-    add_short_term_memory(
-        state["user_id"], query, result.content, "general_campus_query"
-    )
+    add_short_term_memory(state["user_id"], query, result, "general_campus_query")
     return {"messages": [result]}
 
 

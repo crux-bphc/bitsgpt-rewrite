@@ -38,7 +38,7 @@ def add_long_term_memory(
     cur = conn.cursor()
     cur.execute(
         """
-        CREATE TABLE IF NOT EXISTS longterm_memory (
+        CREATE TABLE IF NOT EXISTS long_term_memory (
             id VARCHAR(255) NOT NULL,
             memory VARCHAR(255) NOT NULL,
             category VARCHAR(255) NOT NULL
@@ -48,7 +48,7 @@ def add_long_term_memory(
     if action == "Create":
         cur.execute(
             f"""
-            INSERT INTO longterm_memory (id, memory, category)
+            INSERT INTO long_term_memory (id, memory, category)
             VALUES ('{id}', '{memory}', '{Category(category).value}');
             """
         )
@@ -57,7 +57,7 @@ def add_long_term_memory(
     elif action == "Update":
         cur.execute(
             f"""
-            UPDATE longterm_memory
+            UPDATE long_term_memory
             SET memory = '{memory}'
             WHERE id = '{id}' AND memory = '{memory_old}';
             """
@@ -67,7 +67,7 @@ def add_long_term_memory(
     elif action == "Delete":
         cur.execute(
             f"""
-            DELETE FROM longterm_memory
+            DELETE FROM long_term_memory
             WHERE id = '{id}' AND memory = '{memory_old}' AND category = '{Category(category).value}';
             """
         )
@@ -85,7 +85,7 @@ def fetch_long_term_memory(id: str) -> list[LongTermMemory]:
     cur.execute(
         f"""
         SELECT memory, category
-        FROM longterm_memory
+        FROM long_term_memory
         WHERE id = '{id}';
         """
     )
@@ -104,7 +104,7 @@ def reset_long_term_memory(id: str) -> None:
     cur = conn.cursor()
     cur.execute(
         f"""
-        DELETE FROM longterm_memory
+        DELETE FROM long_term_memory
         WHERE id = '{id}';
         """
     )
